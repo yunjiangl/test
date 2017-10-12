@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+
+	xmlns:tx="http://www.springframework.org/schema/tx"
+
+	xsi:schemaLocation="
+
+http://www.springframework.org/schema/mvc
+
+http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+
+http://www.springframework.org/schema/beans
+
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+
+http://www.springframework.org/schema/context
+
+http://www.springframework.org/schema/context/spring-context-4.0.xsd
+
+http://www.springframework.org/schema/tx
+
+http://www.springframework.org/schema/tx/spring-tx.xsd
+
+http://www.springframework.org/schema/aop
+
+http://www.springframework.org/schema/aop/spring-aop.xsd
+
+">
+
+	<context:component-scan base-package="online.shixun" />
+
+	<bean id="myDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://127.0.0.1:3306/user?characterEncoding=UTF-8" />
+		<property name="username" value="root" />
+		<property name="password" value="admin" />
+	</bean>
+
+	<bean id="mySessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+				hibernate.dialect=online.shixun.common.MySQL5InnoDBUTF8Dialect
+				hibernate.format_sql=true
+				hibernate.show_sql=true
+				hibernate.hbm2ddl.auto=update
+			</value>
+		</property>
+
+		<property name="packagesToScan">
+			<list>
+				<value>online.shixun.beans</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 允许使用注解配置事务 -->
+	<tx:annotation-driven transaction-manager="trans" />
+
+	<!-- 配置事务管理器（声明式的事务） -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory"></property>
+	</bean>
+
+	<!-- 使用注解配置事务，不推荐 <tx:annotation-driven transaction-manager="transactionManager" 
+		/> -->
+	<tx:advice id="txadvice" transaction-manager="transactionManager">
+		<tx:attributes>
+		
+		<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+		<tx:method name="inquire*" propagation="REQUIRED" rollback-for="Exception" />
+		<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="query*" propagation="REQUIRED"
+				rollback-for="Exception" />
+				<tx:method name="statistics*" propagation="REQUIRED"
+				rollback-for="Exception" />
+		</tx:attributes>
+		
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="serviceMethod"
+			expression="execution(* online.shixun.service.*.*(..))" />
+		<aop:advisor pointcut-ref="serviceMethod" advice-ref="txadvice" />
+	</aop:config>
+
+
+</beans>

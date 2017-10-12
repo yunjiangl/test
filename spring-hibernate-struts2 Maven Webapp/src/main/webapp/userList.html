@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>用户列表&查询页面</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" href="resource/images/qsx-32.ico">
+<link rel="stylesheet" type="text/css" href="resource/css/style.css">
+<script src="resource/plugins/jquery-3.2.1.min.js"
+	type="text/javascript"></script>
+<script src="resource/js/common.js" type="text/javascript"></script>
+<script src="resource/js/userList.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<header>
+		<h1>用户管理系统</h1>
+		<p id="help">帮助</p>
+		<p id="exit">退出</p>
+	</header>
+	<article id="left">
+		<section id="left_top">
+			<ul>
+				<li id="select">用户查询</li>
+				<li>
+					<hr>
+				</li>
+				<li id="add">用户新增</li>
+				<li>
+					<hr>
+				</li>
+				<li id="analysis">用户分析</li>
+                <li>
+                    <hr>
+                </li>
+			</ul>
+		</section>
+		<section id="left_bottom">
+			<img src="resource/images/login.jpg">
+			<p>当前登录用户</p>
+		</section>
+	</article>
+	<article id="right">
+		<section id="right_form">
+			<form action="#">
+				<label>用户名：</label> <input type="text" name="username">
+				<button>查询</button>
+			</form>
+		</section>
+		<section id="right_table">
+			<table border="1px" cellspacing="0">
+				<thead>
+					<tr>
+						<th>用户名称</th>
+						<th>邮箱</th>
+						<th>性别</th>
+						<th>创建时间</th>
+						<th>修改时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<div id="page">
+
+				<button id="previous">上一页</button>
+
+				<button id="next">下一页</button>
+
+			</div>
+		</section>
+	</article>
+</body>
+
+</html>
